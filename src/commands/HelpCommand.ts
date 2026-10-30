@@ -7,7 +7,7 @@ export class HelpCommand extends Command {
     }
 
     return [
-      'SVG editor — milestone 1 scaffold',
+      'SVG editor — milestone 2 (model ready; CLI wiring pending)',
       'Available now:',
       '  help                                      Show this command list',
       '',
