@@ -24,7 +24,7 @@ test('script input skips comments, reports errors and continues until EOF', () =
   assert.ifError(result.error);
   assert.equal(result.status, 0);
   assert.match(result.stdout, /Available now:/);
-  assert.match(result.stdout, /not implemented yet/);
+  assert.match(result.stdout, /SVG file commands:/);
   assert.doesNotMatch(result.stdout, /svg> /);
   assert.equal(result.stderr, 'error: unknown command: unknown\nerror: usage: help\n');
 });

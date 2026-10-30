@@ -7,7 +7,7 @@ export class HelpCommand extends Command {
     }
 
     return [
-      'SVG editor — milestone 4 (editing and undo/redo available)',
+      'SVG editor — milestone 5 (SVG read/save available)',
       'Available now:',
       '  help                                      Show this command list',
       '  init [w] [h]',
@@ -33,9 +33,10 @@ export class HelpCommand extends Command {
       '  undo',
       '  redo',
       '',
-      'Planned for later milestones (not implemented yet):',
+      'SVG file commands:',
       '  read <file.svg>',
       '  save [file.svg]',
+      '  External SVG supports six built-in types and their attribute whitelist.',
       '',
       'Lines beginning with # are comments. Use double quotes for spaces.',
       'End input with Ctrl-D (EOF).',

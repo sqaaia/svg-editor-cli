@@ -1,11 +1,15 @@
 import { SvgDocument } from '../model/SvgDocument.js';
 import { CommandHistory } from './CommandHistory.js';
 import type { UndoableEdit } from './UndoableEdit.js';
+import type { DocumentStore } from './DocumentStore.js';
 
 /** Owns the current document and history, publishing only successfully completed operations. */
 export class EditorSession {
   private current: SvgDocument | undefined;
   private readonly history = new CommandHistory();
+  private path: string | undefined;
+  public constructor(private readonly store?: DocumentStore) {}
+  public get filePath(): string | undefined { return this.path; }
 
   public get document(): SvgDocument {
     if (this.current === undefined) {
@@ -18,7 +22,27 @@ export class EditorSession {
     const document = new SvgDocument(width, height);
     this.history.reset();
     this.current = document;
+    this.path = undefined;
     return document;
+  }
+
+  public read(path: string): string {
+    if (!this.store) { throw new Error('document storage not configured'); }
+    const loaded = this.store.read(path);
+    this.current = loaded.document;
+    this.path = path;
+    this.history.reset();
+    return [...loaded.warnings, `read ${path} (${loaded.document.size} elements)`].join('\n');
+  }
+
+  public save(path = this.path): string {
+    const document = this.document;
+    if (path === undefined) { throw new Error("no file path. use 'save <file.svg>'"); }
+    if (!this.store) { throw new Error('document storage not configured'); }
+    this.store.write(path, document);
+    this.path = path;
+    this.history.reset();
+    return `saved to ${path} (${document.size} elements)`;
   }
 
   public resize(width: number, height: number): SvgDocument {

@@ -19,12 +19,15 @@ import { UndoCommand } from './commands/UndoCommand.js';
 import { RedoCommand } from './commands/RedoCommand.js';
 import { CanvasCommand } from './commands/CanvasCommand.js';
 import { ShowCommand } from './commands/ShowCommand.js';
+import { ReadCommand } from './commands/ReadCommand.js';
+import { SaveCommand } from './commands/SaveCommand.js';
+import { SvgFileStore } from './io/SvgFileStore.js';
 
 /** Composition root: creates concrete objects and connects module boundaries. */
 export class Main {
   public run(): void {
     const dispatcher = new CommandDispatcher();
-    const session = new EditorSession();
+    const session = new EditorSession(new SvgFileStore());
     const shapes = new ShapeFactory();
     dispatcher.register('help', () => new HelpCommand());
     dispatcher.register('init', () => new InitCommand(session));
@@ -43,6 +46,8 @@ export class Main {
     dispatcher.register('redo', () => new RedoCommand(session));
     dispatcher.register('canvas', () => new CanvasCommand(session));
     dispatcher.register('show', () => new ShowCommand(session));
+    dispatcher.register('read', () => new ReadCommand(session));
+    dispatcher.register('save', () => new SaveCommand(session));
     new Repl(dispatcher).run();
   }
 }

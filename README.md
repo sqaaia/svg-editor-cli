@@ -4,11 +4,10 @@
 
 ## 当前进度
 
-里程碑 4：已实现全部十种编辑命令及 `undo/redo`，并支持 `init/canvas/tree/show/help`。
-88 项测试通过：28 项模型测试、18 项命令/会话测试、40 项历史/编辑测试、原有 2 项 CLI 测试。
+里程碑 5：已接入 read/save，作业命令表中的全部命令现均可执行。
+124 项测试覆盖模型、命令、历史、SVG 解析和真实文件读写；最终综合验收仍留到第六步。
 
-当前可以创建六种图形、移动、缩放、改属性、分组/解组、重新归属、删除及调整层叠顺序。
-每条成功编辑命令是一个撤销单元；多节点分组或整棵子树删除均可一次撤销。仅 `read/save` 文件读写尚未实现。
+支持六种图形、嵌套分组、移动/缩放/属性修改、结构编辑、undo/redo、画布查询修改和树形/属性显示。
 
 ## 本地运行
 
@@ -94,6 +93,33 @@ canvas
 ```sh
 npm run cli --silent < examples/milestone4.commands
 ```
+
+## SVG 文件读写
+
+```text
+read examples/external.svg
+move scene 10 20
+save demo.svg
+read demo.svg
+save
+```
+
+或直接回放：
+
+```sh
+npm run cli --silent < examples/milestone5.commands
+```
+
+生成的 `demo.svg` 可在浏览器中打开。示例文件有一个缺失 ID 的矩形，读入时会补为 `rect1` 并打印警告。
+成功 read/save 会清空并禁用 undo/redo，直到下一次成功编辑；失败读写保留文档、路径和历史。
+无参数 save 使用最近一次成功 read/save 的路径；init 清除默认路径，需先执行 `save <file.svg>`。
+显式 save 成功后更新默认路径；相对路径以启动进程的当前目录为基准，路径含空格需双引号包裹。
+
+导入是明确的 SVG 子集：UTF-8、六种内置类型、对应几何属性、fill/stroke/stroke-width，以及纯文本内容。
+缺省画布为 800×600，缺省图形数值属性为 0；缺省样式仍不写入。允许 SVG 命名空间或无命名空间。
+viewBox 只支持 `0 0 width height`，数值只支持十进制 px 数字（不带 px 后缀）。
+transform、CSS/style、其他标签/属性、混合文本标签、DOCTYPE 和非 SVG 命名空间均明确拒绝；嵌套最多 128 层。
+XML 注释不保留。保存不保留源文件排版，保留支持范围内的编辑语义。完整边界见架构文档。
 
 ## 检查
 

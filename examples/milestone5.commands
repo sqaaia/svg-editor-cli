@@ -1,0 +1,8 @@
+# Run from the project root: npm run cli --silent < examples/milestone5.commands
+read examples/external.svg
+tree
+move scene 10 20
+save demo.svg
+read demo.svg
+show rect1
+tree

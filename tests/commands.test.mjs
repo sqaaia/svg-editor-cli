@@ -234,10 +234,10 @@ test('checked-in flowchart script runs end to end and moves only node2 descendan
   ].join('\n'));
 });
 
-test('help distinguishes executable editing/history commands from future IO support', () => {
+test('help distinguishes executable editing/history commands from SVG file support', () => {
   const result = runCli('help\n');
   assert.equal(result.stderr, '');
-  const [available, planned] = result.stdout.split('Planned for later milestones (not implemented yet):');
+  const [available, planned] = result.stdout.split('SVG file commands:');
   for (const command of ['init', 'create', 'tree', 'move']) {
     assert.match(available, new RegExp(`^  ${command} `, 'm'));
   }
