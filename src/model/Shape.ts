@@ -29,8 +29,8 @@ export abstract class Shape {
     return [`${this.type}#${this.id}`, this.geometryDescription, ...styles].filter(part => part !== '').join(' ');
   }
 
-  public movementSummary(dx: number, dy: number): string {
-    return `${this.type}#${this.id} moved by (${dx},${dy})`;
+  public movementSummary(dx: number, dy: number, undo = false): string {
+    return `${this.type}#${this.id} moved${undo ? ' back' : ''} by (${dx},${dy})`;
   }
 
   public set(name: string, value: string | number): Shape {

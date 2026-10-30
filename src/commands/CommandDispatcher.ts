@@ -20,7 +20,7 @@ export class CommandDispatcher {
     if (create === undefined) {
       throw new Error(`unknown command: ${name}`);
     }
-    // Each invocation owns its command instance, ready for per-edit history later.
+    // Each invocation owns its command instance and any per-edit history snapshots.
     return create().execute(tokens.slice(1));
   }
 }

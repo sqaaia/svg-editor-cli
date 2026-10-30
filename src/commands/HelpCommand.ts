@@ -7,7 +7,7 @@ export class HelpCommand extends Command {
     }
 
     return [
-      'SVG editor — milestone 3 (init/create/tree/move available)',
+      'SVG editor — milestone 4 (editing and undo/redo available)',
       'Available now:',
       '  help                                      Show this command list',
       '  init [w] [h]',
@@ -20,10 +20,6 @@ export class HelpCommand extends Command {
       '    g:       (no geometry parameters)',
       '  tree [id]',
       '  move <id> <dx> <dy>',
-      '',
-      'Planned for later milestones (not implemented yet):',
-      '  read <file.svg>',
-      '  save [file.svg]',
       '  canvas [w] [h]',
       '  delete <id>',
       '  scale <id> <factor>',
@@ -36,6 +32,10 @@ export class HelpCommand extends Command {
       '  show <id>',
       '  undo',
       '  redo',
+      '',
+      'Planned for later milestones (not implemented yet):',
+      '  read <file.svg>',
+      '  save [file.svg]',
       '',
       'Lines beginning with # are comments. Use double quotes for spaces.',
       'End input with Ctrl-D (EOF).',

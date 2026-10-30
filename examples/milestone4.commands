@@ -1,0 +1,29 @@
+# Replay: npm run cli --silent < examples/milestone4.commands
+init
+create g scene
+create rect r 10 20 100 50 red in scene
+create circle c 100 100 20 in scene
+create text t 1 2 "原文" in scene
+group nodes r c t
+move nodes 20 30
+undo
+redo
+scale nodes 0.5
+undo
+set t text "更新内容"
+undo
+redo
+create g spare in scene
+addto spare t
+undo
+redo
+front nodes
+back spare
+delete nodes
+undo
+ungroup nodes
+undo
+redo
+show t
+canvas
+tree

@@ -1,0 +1,49 @@
+@startuml
+title Milestone 4 - Commands and snapshot history
+abstract class Command {
+  +execute(args): string
+}
+abstract class EditCommand {
+  -before: SvgDocument
+  -after: SvgDocument
+  +apply(document, args): SvgDocument
+  +undo(): SvgDocument
+  +redo(): SvgDocument
+  #edit(candidate, args): string
+}
+interface UndoableEdit
+class EditorSession
+class CommandHistory
+class SvgDocument
+class CreateCommand
+class MoveCommand
+class ScaleCommand
+class SetCommand
+class DeleteCommand
+class GroupCommand
+class UngroupCommand
+class AddToCommand
+class FrontCommand
+class BackCommand
+Command <|-- EditCommand
+UndoableEdit <|.. EditCommand
+EditorSession *-- CommandHistory
+EditorSession --> SvgDocument : current document
+CommandHistory --> UndoableEdit : undo / redo stacks
+EditCommand --> EditorSession : executeEdit
+EditCommand *-- SvgDocument : private snapshots
+EditCommand <|-- CreateCommand
+EditCommand <|-- MoveCommand
+EditCommand <|-- ScaleCommand
+EditCommand <|-- SetCommand
+EditCommand <|-- DeleteCommand
+EditCommand <|-- GroupCommand
+EditCommand <|-- UngroupCommand
+EditCommand <|-- AddToCommand
+EditCommand <|-- FrontCommand
+EditCommand <|-- BackCommand
+note right of UndoableEdit
+  Port owned by application.
+  application never imports commands.
+end note
+@enduml

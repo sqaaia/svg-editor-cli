@@ -25,8 +25,8 @@ function editor() {
   return {
     session,
     init: new InitCommand(session),
-    create: new CreateCommand(session, new ShapeFactory()),
-    move: new MoveCommand(session),
+    create: { execute: args => new CreateCommand(session, new ShapeFactory()).execute(args) },
+    move: { execute: args => new MoveCommand(session).execute(args) },
     tree: new TreeCommand(session),
   };
 }
@@ -234,14 +234,15 @@ test('checked-in flowchart script runs end to end and moves only node2 descendan
   ].join('\n'));
 });
 
-test('help distinguishes executable commands from future undo and IO support', () => {
+test('help distinguishes executable editing/history commands from future IO support', () => {
   const result = runCli('help\n');
   assert.equal(result.stderr, '');
   const [available, planned] = result.stdout.split('Planned for later milestones (not implemented yet):');
   for (const command of ['init', 'create', 'tree', 'move']) {
     assert.match(available, new RegExp(`^  ${command} `, 'm'));
   }
-  assert.match(planned, /^  undo$/m);
+  assert.match(available, /^  undo$/m);
+  assert.match(available, /^  redo$/m);
   assert.match(planned, /^  save /m);
   assert.match(available, /<x> <y> "content"/);
 });

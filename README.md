@@ -4,11 +4,11 @@
 
 ## 当前进度
 
-里程碑 3：已接入 `init/create/tree/move`，可以在终端创建六种图形、建立嵌套容器、查看结构树并移动图形或整组。
-48 项测试通过：28 项模型测试、18 项命令/会话测试、原有 2 项 CLI 测试。
+里程碑 4：已实现全部十种编辑命令及 `undo/redo`，并支持 `init/canvas/tree/show/help`。
+88 项测试通过：28 项模型测试、18 项命令/会话测试、40 项历史/编辑测试、原有 2 项 CLI 测试。
 
-模型层还支持缩放、属性修改、分组/解组、重新归属、删除、层叠顺序和独立快照，这些编辑命令将在后续接入。
-文件读写和 `undo/redo` 尚未实现，`help` 会区分当前可用命令与后续计划。
+当前可以创建六种图形、移动、缩放、改属性、分组/解组、重新归属、删除及调整层叠顺序。
+每条成功编辑命令是一个撤销单元；多节点分组或整棵子树删除均可一次撤销。仅 `read/save` 文件读写尚未实现。
 
 ## 本地运行
 
@@ -58,6 +58,43 @@ svg (800x600)
 npm run cli --silent < examples/milestone3.commands
 ```
 
+## 撤销重做与其余编辑命令
+
+在同一个交互会话中，接着上述示例尝试：
+
+```text
+move node 30 0
+undo
+redo
+set label text "更新标题"
+scale node 0.5
+undo
+group nested box label
+ungroup nested
+undo
+create g destination in node
+addto destination label
+front destination
+back nested
+delete nested
+undo
+show label
+canvas
+```
+
+- `undo` 撤销最近一条成功编辑；`redo` 恢复撤销后的状态。新成功编辑清空 redo，失败编辑不影响任一历史栈。
+- `tree/show/help` 和不带参数的 `canvas` 不进入历史，不清空 redo。
+- 成功的 `init` 或带参数的 `canvas` 清空旧历史，并禁用 undo/redo，直到下一条成功编辑。
+- `canvas 400` 只修改宽度、保留当前高度；`canvas 400 300` 同时修改两者，均不改变图形坐标。
+- `front` 置于同级视觉最前（最后绘制），`back` 置于视觉最后；根级容器按作业要求不能 `ungroup`。
+- `show id` 显示父级、几何、显式样式和文字内容。完整命令参数可用 `help` 查询。
+
+回放本阶段的完整编辑与撤销示例：
+
+```sh
+npm run cli --silent < examples/milestone4.commands
+```
+
 ## 检查
 
 检查命令：
@@ -90,11 +127,14 @@ console.log(document.get('label').attributes); // { x: 155, y: 235 }
 
 图形对象不可变：直接调用 `shape.move/scale/set` 会返回新对象。修改当前文档应调用 `document` 的对应方法；
 编辑后通过 `document.get(id)` 获取最新对象。读取到的属性和子节点数组不能用于绕过模型修改状态。
+上述是独立模型 API 示例，不记录历史。需要撤销重做的应用应经由命令和 `EditorSession.executeEdit` 执行修改，
+不要直接修改 `session.document`；编辑和撤销后都应从 session 重新取得当前文档。
 
 ## 文档
 
 - [作业原文](phase_cli_1.md)
 - [架构方案、过程记录、自查与质量保证](doc/README.md)
 - [PlantUML 模块依赖图源文件](doc/architecture.puml)
+- [Command 与历史协作类图源文件](doc/history.puml)
 
 开发按里程碑分步提交并推送。完成全部要求且验收通过后，才创建并推送 `final` 标签。

@@ -1,12 +1,12 @@
 import type { EditorSession } from '../application/EditorSession.js';
 import type { ShapeFactory } from '../model/ShapeFactory.js';
-import { Command } from './Command.js';
+import type { SvgDocument } from '../model/SvgDocument.js';
+import { EditCommand } from './EditCommand.js';
 
-export class CreateCommand extends Command {
-  public constructor(private readonly session: EditorSession, private readonly factory: ShapeFactory) { super(); }
+export class CreateCommand extends EditCommand {
+  public constructor(session: EditorSession, private readonly factory: ShapeFactory) { super(session); }
 
-  public override execute(args: readonly string[]): string {
-    const document = this.session.document;
+  protected override edit(document: SvgDocument, args: readonly string[]): string {
     const [type, id] = args;
     if (type === undefined || id === undefined) {
       throw new Error('usage: create <type> <id> [params...] [in <containerId>]');

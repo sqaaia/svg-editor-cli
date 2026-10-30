@@ -15,8 +15,8 @@ export abstract class GeometricShape extends Shape {
   protected abstract copy(geometry: Geometry, style: Style): GeometricShape;
   protected abstract get positionDescription(): string;
 
-  public override movementSummary(_dx: number, _dy: number): string {
-    return `${this.type}#${this.id} moved to ${this.positionDescription}`;
+  public override movementSummary(_dx: number, _dy: number, undo = false): string {
+    return `${this.type}#${this.id} moved${undo ? ' back' : ''} to ${this.positionDescription}`;
   }
 
   public override move(dx: number, dy: number): GeometricShape {

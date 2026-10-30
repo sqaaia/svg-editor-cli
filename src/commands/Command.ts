@@ -1,4 +1,4 @@
-/** Common command abstraction; undoable editing commands will extend it later. */
+/** Common command abstraction; EditCommand adds transactional execution and snapshots. */
 export abstract class Command {
   public abstract execute(args: readonly string[]): string;
 }
