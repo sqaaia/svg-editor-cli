@@ -4,10 +4,10 @@
 
 ## 当前进度
 
-里程碑 5：已接入 read/save，作业命令表中的全部命令现均可执行。
-124 项测试覆盖模型、命令、历史、SVG 解析和真实文件读写；最终综合验收仍留到第六步。
+六个阶段已完成：作业全部 19 个命令可执行，129 项自动化测试通过，已完成架构一致性检查与离线视觉验收。
+最终交付标签：`final`。完整范围、已知限制和验收证据见 [最终验收报告](doc/ACCEPTANCE.md)。
 
-支持六种图形、嵌套分组、移动/缩放/属性修改、结构编辑、undo/redo、画布查询修改和树形/属性显示。
+![实际 CLI 保存的流程图预览](doc/acceptance/flowchart.png)
 
 ## 本地运行
 
@@ -164,3 +164,17 @@ console.log(document.get('label').attributes); // { x: 155, y: 235 }
 - [Command 与历史协作类图源文件](doc/history.puml)
 
 开发按里程碑分步提交并推送。完成全部要求且验收通过后，才创建并推送 `final` 标签。
+
+## 最终验收与交付
+
+```sh
+npm ci
+npm run check
+npm run render:acceptance
+```
+
+本地验收为 129 项通过；CI 工作流在每次 push/PR 重复安装、测试和离线渲染。
+渲染脚本需要系统 TTF 字体；找不到默认字体时可设置 SVG_ACCEPTANCE_FONT。
+组件图有 [SVG 预览](doc/architecture.svg) 和 [PlantUML 源码](doc/architecture.puml)。
+检查最终标签：`git show final --stat`。恢复提交版本可克隆仓库后执行 `git switch --detach final`。
+课程截止日期未在作业文件中给出，提交时间需与课程通知自行核对。

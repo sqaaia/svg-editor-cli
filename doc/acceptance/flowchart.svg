@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="260" viewBox="0 0 800 260">
+  <g id="flowchart">
+    <g id="node1">
+      <rect id="start" x="80" y="90" width="180" height="70" fill="#4a90d9"/>
+      <text id="start-label" x="100" y="130">Start</text>
+    </g>
+    <g id="node2">
+      <rect id="process" x="500" y="90" width="180" height="70" fill="#f5a623"/>
+      <text id="process-label" x="520" y="130">Process</text>
+    </g>
+    <line id="edge" x1="260" y1="125" x2="500" y2="125" stroke="black"/>
+  </g>
+</svg>

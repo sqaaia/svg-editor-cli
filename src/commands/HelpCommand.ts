@@ -7,7 +7,7 @@ export class HelpCommand extends Command {
     }
 
     return [
-      'SVG editor — milestone 5 (SVG read/save available)',
+      'SVG editor 0.1 — all Phase 1 commands available',
       'Available now:',
       '  help                                      Show this command list',
       '  init [w] [h]',

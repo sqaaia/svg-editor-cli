@@ -1,0 +1,17 @@
+# End-to-end acceptance: build, edit, undo/redo, save, and read the result.
+init 800 260
+create g flowchart
+create g node1 in flowchart
+create rect start 80 90 180 70 #4a90d9 in node1
+create text start-label 100 130 "Start" in node1
+create g node2 in flowchart
+create rect process 500 90 180 70 #f5a623 in node2
+create text process-label 520 130 "Process" in node2
+create line edge 260 125 500 125 black in flowchart
+move node2 0 20
+undo
+redo
+undo
+save final-flowchart.svg
+read final-flowchart.svg
+tree

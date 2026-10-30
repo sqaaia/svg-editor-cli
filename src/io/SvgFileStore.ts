@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, renameSync, rmSync, existsSync, accessSync, constants } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, rmSync, existsSync, accessSync, statSync, chmodSync, constants } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { dirname, basename, join } from 'node:path';
 import type { DocumentStore } from '../application/DocumentStore.js';
@@ -18,8 +18,13 @@ export class SvgFileStore implements DocumentStore {
     const xml = this.codec.encode(document);
     const temporary = join(dirname(path), `.${basename(path)}.${randomUUID()}.tmp`);
     try {
-      if (existsSync(path)) { accessSync(path, constants.W_OK); }
-      writeFileSync(temporary, xml, { flag: 'wx' });
+      let mode: number | undefined;
+      if (existsSync(path)) {
+        accessSync(path, constants.W_OK);
+        mode = statSync(path).mode & 0o777;
+      }
+      writeFileSync(temporary, xml, { flag: 'wx', ...(mode === undefined ? {} : { mode }) });
+      if (mode !== undefined) { chmodSync(temporary, mode); }
       renameSync(temporary, path);
     } catch {
       try { rmSync(temporary, { force: true }); } catch { /* Keep the original write failure. */ }
