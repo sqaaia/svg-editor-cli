@@ -1,0 +1,20 @@
+@startuml
+title SVG Editor CLI - Phase 1 target dependencies
+skinparam componentStyle rectangle
+component "Main\ncomposition root" as Main
+package "cli" as CLI
+package "commands" as Commands
+package "application\nsession + storage port + history" as Application
+package "model\ndocument + shapes" as Model
+package "io\nSVG codec + file adapter" as IO
+Main --> CLI
+Main --> Commands
+Main --> Application
+Main --> IO
+CLI --> Commands
+Commands --> Application
+Commands --> Model
+Application --> Model
+IO --> Application : implements storage port
+IO --> Model
+@enduml
