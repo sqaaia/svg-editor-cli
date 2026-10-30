@@ -4,11 +4,11 @@
 
 ## 当前进度
 
-里程碑 2：图形模型与分组已实现，包含六种图形、递归移动/缩放、属性白名单、唯一 ID、
-分组/解组、重新归属、删除、层叠顺序及独立文档快照。28 项模型测试和 2 项 CLI 测试通过。
+里程碑 3：已接入 `init/create/tree/move`，可以在终端创建六种图形、建立嵌套容器、查看结构树并移动图形或整组。
+48 项测试通过：28 项模型测试、18 项命令/会话测试、原有 2 项 CLI 测试。
 
-命令行目前仍只可执行 `help`，支持逐行输入、整行注释、双引号参数和统一错误输出。
-模型操作尚未接入 CLI；`init/create/tree/move` 的命令接入是下一步。文件读写和 `undo/redo` 也尚未实现。
+模型层还支持缩放、属性修改、分组/解组、重新归属、删除、层叠顺序和独立快照，这些编辑命令将在后续接入。
+文件读写和 `undo/redo` 尚未实现，`help` 会区分当前可用命令与后续计划。
 
 ## 本地运行
 
@@ -25,6 +25,40 @@ npm run cli
 ```sh
 printf 'help\n' | npm run cli --silent
 ```
+
+## 命令行示例
+
+启动 `npm run cli` 后依次输入（不需要输入 `svg>`）：
+
+```text
+init 800 600
+create g node
+create rect box 120 100 160 60 #4a90d9 in node
+create text label 155 135 "开始" in node
+move node 0 100
+tree
+```
+
+最后的结构树为：
+
+```text
+svg (800x600)
+└── g#node
+    ├── rect#box x=120 y=200 w=160 h=60 fill=#4a90d9
+    └── text#label (155,235) "开始"
+```
+
+`tree node` 只显示指定子树；`init` 默认 800×600，`init 400` 默认高度为 600。
+重新 `init` 会创建空文档；参数非法则保留原文档。`create` 的尾部可使用 `in <containerId>`，支持任意层级嵌套。
+文字含空格时用双引号，整行 `#` 注释和十六进制颜色参数可同时使用。
+
+回放作业中的双节点流程图（本阶段支持的创建、移动和查看部分）：
+
+```sh
+npm run cli --silent < examples/milestone3.commands
+```
+
+## 检查
 
 检查命令：
 

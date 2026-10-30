@@ -9,6 +9,13 @@ export class Text extends GeometricShape {
   }
   public override get type(): string { return 'text'; }
   public override get textContent(): string { return this.content; }
+  protected override get geometryDescription(): string {
+    return `${this.positionDescription} ${JSON.stringify(this.content)}`;
+  }
+  protected override get positionDescription(): string {
+    const { x, y } = this.geometry.attributes;
+    return `(${x},${y})`;
+  }
   public override set(name: string, value: string | number): Shape {
     if (name === 'text') {
       const { x, y } = this.geometry.attributes;

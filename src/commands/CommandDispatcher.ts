@@ -2,13 +2,13 @@ import type { Command } from './Command.js';
 
 /** The only command-name dispatch point. It does not inspect shape types. */
 export class CommandDispatcher {
-  private readonly commands = new Map<string, Command>();
+  private readonly commands = new Map<string, () => Command>();
 
-  public register(name: string, command: Command): void {
+  public register(name: string, create: () => Command): void {
     if (this.commands.has(name)) {
       throw new Error(`command already registered: ${name}`);
     }
-    this.commands.set(name, command);
+    this.commands.set(name, create);
   }
 
   public dispatch(tokens: readonly string[]): string {
@@ -16,10 +16,11 @@ export class CommandDispatcher {
     if (name === undefined) {
       throw new Error('missing command');
     }
-    const command = this.commands.get(name);
-    if (command === undefined) {
+    const create = this.commands.get(name);
+    if (create === undefined) {
       throw new Error(`unknown command: ${name}`);
     }
-    return command.execute(tokens.slice(1));
+    // Each invocation owns its command instance, ready for per-edit history later.
+    return create().execute(tokens.slice(1));
   }
 }

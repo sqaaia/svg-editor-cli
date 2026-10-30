@@ -7,6 +7,11 @@ export class Line extends GeometricShape {
     super(id, new Geometry({ x1, y1, x2, y2 }, ['x1', 'x2'], ['y1', 'y2']), style);
   }
   public override get type(): string { return 'line'; }
+  protected override get geometryDescription(): string { return this.positionDescription; }
+  protected override get positionDescription(): string {
+    const { x1, y1, x2, y2 } = this.geometry.attributes;
+    return `(${x1},${y1}) -> (${x2},${y2})`;
+  }
   protected override copy(geometry: Geometry, style: Style): Line {
     const { x1, y1, x2, y2 } = geometry.attributes;
     return new Line(this.id, x1!, y1!, x2!, y2!, style);

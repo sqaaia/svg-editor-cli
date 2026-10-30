@@ -10,6 +10,7 @@ package "io\nSVG codec + file adapter" as IO
 Main --> CLI
 Main --> Commands
 Main --> Application
+Main --> Model
 Main --> IO
 CLI --> Commands
 Commands --> Application

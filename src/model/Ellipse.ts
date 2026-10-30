@@ -7,6 +7,14 @@ export class Ellipse extends GeometricShape {
     super(id, new Geometry({ cx, cy, rx, ry }, ['cx'], ['cy']), style);
   }
   public override get type(): string { return 'ellipse'; }
+  protected override get geometryDescription(): string {
+    const { cx, cy, rx, ry } = this.geometry.attributes;
+    return `cx=${cx} cy=${cy} rx=${rx} ry=${ry}`;
+  }
+  protected override get positionDescription(): string {
+    const { cx, cy } = this.geometry.attributes;
+    return `(${cx},${cy})`;
+  }
   protected override copy(geometry: Geometry, style: Style): Ellipse {
     const { cx, cy, rx, ry } = geometry.attributes;
     return new Ellipse(this.id, cx!, cy!, rx!, ry!, style);

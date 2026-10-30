@@ -7,6 +7,14 @@ export class Rect extends GeometricShape {
     super(id, new Geometry({ x, y, width, height }, ['x'], ['y']), style);
   }
   public override get type(): string { return 'rect'; }
+  protected override get geometryDescription(): string {
+    const { x, y, width, height } = this.geometry.attributes;
+    return `x=${x} y=${y} w=${width} h=${height}`;
+  }
+  protected override get positionDescription(): string {
+    const { x, y } = this.geometry.attributes;
+    return `(${x},${y})`;
+  }
   protected override copy(geometry: Geometry, style: Style): Rect {
     const { x, y, width, height } = geometry.attributes;
     return new Rect(this.id, x!, y!, width!, height!, style);

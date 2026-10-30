@@ -20,6 +20,19 @@ export abstract class Shape {
   public abstract clone(): Shape;
   protected abstract withStyle(style: Style): Shape;
 
+  /** Pure descriptions owned by each shape; no terminal or other IO dependencies. */
+  protected get geometryDescription(): string { return ''; }
+
+  public summary(): string {
+    const styles = Object.entries(this.style.attributes).map(([name, value]) =>
+      `${name}=${typeof value === 'string' && /\s/u.test(value) ? JSON.stringify(value) : value}`);
+    return [`${this.type}#${this.id}`, this.geometryDescription, ...styles].filter(part => part !== '').join(' ');
+  }
+
+  public movementSummary(dx: number, dy: number): string {
+    return `${this.type}#${this.id} moved by (${dx},${dy})`;
+  }
+
   public set(name: string, value: string | number): Shape {
     if (!Style.accepts(name)) {
       throw new Error(`unknown attribute: ${name}`);
